@@ -76,10 +76,10 @@ ggplot(mpg, aes(displ, hwy)) +
 ```{r}
 StatDifference <- ggproto("StatDifference", Stat,
   compute_group = function(data, scales) {
-    method1 <- data$x
-    new_data <- data.frame(x = method1)
-    new_data$y <- data$x - data$y
-    
+    method1 <- (data$x + data$y)/2
+    method2 <- data$x - data$y
+    new_data <- data.frame(x = method1,
+                           y = method2)
     new_data
   },
   
@@ -120,13 +120,17 @@ set.seed(1)
 data <- data.frame(x = runif(100, 0, 10),
                    y = runif(100, 0, 10))
 
-ggplot(data, aes(x, y)) + 
+
+ggplot(data, aes(x, y)) +
   geom_simple_diff()
 ```
 
 # Geom for Mountain Plot
 
 
+```{r}
+
+```
 
 
 
