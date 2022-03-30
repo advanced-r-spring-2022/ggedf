@@ -160,9 +160,12 @@ ggplot(data, aes(x, y)) +
 # Extending `{ggplot2}`: Mountain Plot
 
 ```{r}
+geom_density
 
+StatDensity
 ```
 
+# Exercises
 
 
 
