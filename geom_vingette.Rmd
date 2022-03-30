@@ -112,6 +112,35 @@ ggplot(mpg, aes(y = hwy)) +
   stat_percentile()
 ```
 
+## Alloqing for Additional User Arguments
+
+```{r}
+StatPercentile <- ggproto("StatPercentile", Stat,
+                          
+  compute_group = function(data, scales) {
+    data <- data.frame(y = data$y)
+    new_data <- data.frame(y = apply(data, 2, function(x) ecdf(x)(sort(x))))
+    new_data$x <- 1:nrow(new_data)
+    new_data
+  },
+  
+  required_aes = c("y")
+  
+)
+
+stat_percentile <- function(mapping = NULL, data = NULL, geom = "line",
+                       position = "identity", na.rm = FALSE, show.legend = NA, 
+                       inherit.aes = TRUE, ...) {
+  layer(
+    stat = StatPercentile, data = data, mapping = mapping, geom = geom, 
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+ggplot(mpg, aes(y = hwy)) +
+  stat_percentile(color = "red", linetype = "dashed", geom = "point")
+```
 
 ## Geom Example
 
@@ -122,6 +151,9 @@ GeomSimpleLine <- ggproto("GeomSimpleLine", Geom,
   draw_key = draw_key_path,
 
   draw_panel = function(data, panel_params, coord) {
+    
+    data <- dplyr::arrange(data, x)
+    
     coords <- coord$transform(data, panel_params)
     grid::linesGrob(
       x = unit(coords$x, "npc"), 
@@ -137,19 +169,17 @@ geom_simple_line <- function(mapping = NULL, data = NULL, stat = "identity",
   layer(
     geom = GeomSimpleLine, mapping = mapping,  data = data, stat = stat, 
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    params = list(na.rm = na.rm)
   )
 }
 
-data <- data.frame(x = 1:10,
-                   y = c(1,2,4,7,6,3,1,5,9,8)
-)
-
-ggplot(data, aes(x, y)) + 
+ggplot(mtcars, aes(mpg, wt)) +
   geom_simple_line()
 ```
 
 # Extending `{ggplot2}`: Difference Plot
+
+Text 
 
 ## Custom Stat for Difference Plot
 
@@ -192,11 +222,11 @@ GeomSimpleDifference <- ggproto("GeomSimpleDifference", Geom,
 
 geom_simple_diff <- function(mapping = NULL, data = NULL, stat = "difference",
                               position = "identity", na.rm = FALSE, show.legend = NA, 
-                              inherit.aes = TRUE, ...) {
+                              inherit.aes = TRUE) {
   layer(
     geom = GeomSimpleDifference, mapping = mapping,  data = data, stat = stat, 
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    params = list(na.rm = na.rm)
   )
 }
 ```
@@ -213,49 +243,133 @@ ggplot(data, aes(x, y)) +
   geom_simple_diff()
 ```
 
-# Extending `{ggplot2}`: Mountain Plot
-
-```{r}
-geom_density
-
-StatDensity
-```
 
 # Exercises
-1. Create a simple regression line. 
+
+```{r}
+new_data <- data.frame(y = mtcars$mpg)
+    model <- lm(mpg ~ wt, data = mtcars)
+    new_data$x <- predict(model, newdata = data.frame(wt = mtcars$wt))
+    new_data
+```
+```{r}
+rng <- range(c(1,2,100))
+
+?seq
+data.frame(x = seq(rng[1], rng[2]))
+```
+
+1. Create a Stat for a Regression Line (`geom_smooth()`)
+
+
+
 ```{r, echo = FALSE}
-# this is very similar to what was provided in the vignette
-GeomSimpleLine <- ggproto("GeomSimpleLine", Stat, 
-                          required_aes = c("x", "y"),
-  compute_group = function(data, scales, params, n = 100, formula = y ~ x) {
+StatLm <- ggproto("StatLm", Stat,
+                          
+  compute_group = function(data, scales) {
     rng <- range(data$x, na.rm = TRUE)
-    grid <- data.frame(x = seq(rng[1], rng[2], length = n))
+    new_data <- data.frame(x = seq(rng[1], rng[2], length.out = nrow(data)))
     
-    mod <- lm(formula, data = data)
-    grid$y <- predict(mod, newdata = grid)
+    model <- lm(y ~ x, data = data)
     
-    grid
+    new_data$y <- predict(model, newdata = data.frame(x = new_data$x))
+    new_data
+  },
+  
+  required_aes = c("x", "y")
+  
+)
+
+stat_lm <- function(mapping = NULL, data = NULL, geom = "line",
+                       position = "identity", na.rm = FALSE, show.legend = NA, 
+                       inherit.aes = TRUE) {
+  layer(
+    stat = StatLm, data = data, mapping = mapping, geom = geom, 
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm)
+  )
+}
+```
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  stat_lm()
+```
+
+
+2. Add arguments to the Regression Line Stat
+
+
+
+```{r, echo = FALSE}
+StatLm <- ggproto("StatLm", Stat,
+                          
+  compute_group = function(data, scales, formula = y ~ x) {
+    rng <- range(data$x, na.rm = TRUE)
+    new_data <- data.frame(x = seq(rng[1], rng[2], length.out = nrow(data)))
+    
+    model <- lm(formula, data = data)
+    
+    new_data$y <- predict(model, newdata = data.frame(x = new_data$x))
+    new_data
+  },
+  
+  required_aes = c("x", "y")
+  
+)
+
+stat_lm <- function(mapping = NULL, data = NULL, geom = "line",
+                       position = "identity", na.rm = FALSE, show.legend = NA, 
+                       inherit.aes = TRUE, ...) {
+  layer(
+    stat = StatLm, data = data, mapping = mapping, geom = geom, 
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+```
+
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  stat_lm(formula = y ~ poly(x, 4), color = "blue", linetype = "dotted", size = 3)
+```
+
+
+3. Create a Geom for <<Something>>
+
+```{r}
+GeomSimpleHist <- ggproto("GeomSimpleHist", Geom,
+  required_aes = c("x"),
+  default_aes = aes(shape = 19, colour = "black"),
+  draw_key = draw_key_path,
+
+  draw_panel = function(data, panel_params, coord) {
+    
+    data <- dplyr::arrange(data, x)
+    
+    coords <- coord$transform(data, panel_params)
+    grid::segmentsGrob(
+      coords$x
+      gp = grid::gpar(col = coords$colour)
+    )
   }
 )
 
-geom_simple_line <- function(mapping = NULL, data = NULL, geom = "line", 
+?draw_key
+geom_simple_line <- function(mapping = NULL, data = NULL, stat = "identity",
                               position = "identity", na.rm = FALSE, show.legend = NA, 
-                              inherit.aes = TRUE, n = 100, formula = y ~ x, ...) {
-  
-    layer(
-    stat = GeomSimpleLine, data = data, mapping = mapping, geom = geom, 
+                              inherit.aes = TRUE, ...) {
+  layer(
+    geom = GeomSimpleLine, mapping = mapping,  data = data, stat = stat, 
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-    params = list(n = n, formula = formula, na.rm = na.rm, ...)
-
+    params = list(na.rm = na.rm)
   )
 }
 
-ggplot(mtcars, aes(mpg, wt)) + 
+ggplot(mtcars, aes(mpg, wt)) +
   geom_simple_line()
-  
 ```
-
-
 
 
 
