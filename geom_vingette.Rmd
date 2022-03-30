@@ -78,7 +78,27 @@ Geoms are concerned with graphing data in a particular way.
 
 ### The `layer()` function
 
- - `layer()` function
+The layer function, regardless of whether one is creating a stat or a geom, is used to specify the defaults that will be used when calling the function and stores them. They specify arguments for the geom/stat as well as any aesthetics. The params argument is perhaps one of the most important, as it can be used to inherit parameters from other functions. \n
+
+Essential Arguments (these are the arguments we used in the vignette):
+
+ - geom: geometric object used in displaying data
+ - stat: statistical transoformation used on the data
+ - data: data taking the form of a data.frame, data inherited from plot data in the `ggplot()` call, or a function with the return value of a data.frame
+ - mapping: mappings created by `aes()` to specify x and y values, for example
+ - position: position adjustment
+ - show.legend: whether this layer will be included in legends
+ - inhereit.aes: combines default aesthetics if TRUE, overrides them if FALSE
+ - params: any additional parameters added to geom and stat, such as removing NA values
+ 
+Other arguments include:
+
+ - check.aes
+ - check.param
+ - key_glyph
+ - layer_class
+
+Note: While layer can also be called using `geom_*` or `stat_`, this may cause some confusion, as a layer necessitates both a geom and a state in its arguments
 
 # Examples
 
@@ -112,7 +132,7 @@ ggplot(mpg, aes(y = hwy)) +
   stat_percentile()
 ```
 
-## Alloqing for Additional User Arguments
+## Allowing for Additional User Arguments
 
 ```{r}
 StatPercentile <- ggproto("StatPercentile", Stat,
@@ -350,7 +370,7 @@ GeomSimpleHist <- ggproto("GeomSimpleHist", Geom,
     
     coords <- coord$transform(data, panel_params)
     grid::segmentsGrob(
-      coords$x
+      coords$x,
       gp = grid::gpar(col = coords$colour)
     )
   }
