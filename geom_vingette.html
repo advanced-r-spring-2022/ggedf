@@ -435,8 +435,13 @@ users must provide</li>
 <li><code>compute_group</code>: a function which returns properly
 transformed data</li>
 </ul>
-<p>Stats are more concerned with applying specific mathematically
-transformative logic to data.</p>
+<p>After these two arguments, a <code>layer()</code> function is used to
+specify defaults and specific parameters for the stat. First, one
+defines the defaults for the function and then the <code>layer()</code>
+function is called and sends arguments for the stat to the params
+argument. The same process is done for geoms. However, stats are more
+concerned with applying specific mathematically transformative logic to
+data.</p>
 </div>
 <div id="the-geom-ggproto" class="section level3">
 <h3>The Geom <code>ggproto</code></h3>
@@ -469,34 +474,34 @@ aesthetic</li>
 <div id="the-layer-function" class="section level3">
 <h3>The <code>layer()</code> function</h3>
 <p>The layer function, regardless of whether one is creating a stat or a
-geom, is used to specify the defaults that will be used when calling the
-function and stores them. They specify arguments for the geom/stat as
-well as any aesthetics. The params argument is perhaps one of the most
-important, as it can be used to inherit parameters from other functions.
-</p>
+geom, is where the defaults from the function are sent to when calling
+the function. They specify arguments for the geom/stat as well as any
+aesthetics. The params argument is perhaps one of the most important, as
+it can be used to inherit parameters from other functions. </p>
 <p>Essential Arguments (these are the arguments we used in the
 vignette):</p>
 <ul>
-<li>geom: geometric object used in displaying data</li>
-<li>stat: statistical transoformation used on the data</li>
-<li>data: data taking the form of a data.frame, data inherited from plot
-data in the <code>ggplot()</code> call, or a function with the return
-value of a data.frame</li>
-<li>mapping: mappings created by <code>aes()</code> to specify x and y
-values, for example</li>
-<li>position: position adjustment</li>
-<li>show.legend: whether this layer will be included in legends</li>
-<li>inhereit.aes: combines default aesthetics if TRUE, overrides them if
-FALSE</li>
-<li>params: any additional parameters added to geom and stat, such as
-removing NA values</li>
+<li><code>geom</code>: geometric object used in displaying data</li>
+<li><code>stat</code>: statistical transoformation used on the data</li>
+<li><code>data</code>: data taking the form of a data.frame, data
+inherited from plot data in the <code>ggplot()</code> call, or a
+function with the return value of a data.frame</li>
+<li><code>mapping</code>: mappings created by <code>aes()</code> to
+specify x and y values, for example</li>
+<li><code>position</code>: position adjustment</li>
+<li><code>show.legend</code>: whether this layer will be included in
+legends</li>
+<li><code>inherit.aes</code>: combines default aesthetics if TRUE,
+overrides them if FALSE</li>
+<li><code>params</code>: any additional parameters added to geom and
+stat, such as removing NA values</li>
 </ul>
 <p>Other arguments include:</p>
 <ul>
-<li>check.aes</li>
-<li>check.param</li>
-<li>key_glyph</li>
-<li>layer_class</li>
+<li><code>check.aes</code></li>
+<li><code>check.param</code></li>
+<li><code>key_glyph</code></li>
+<li><code>layer_class</code></li>
 </ul>
 <p>Note: While layer can also be called using <code>geom_*</code> or
 <code>stat_</code>, this may cause some confusion, as a layer
