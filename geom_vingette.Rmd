@@ -1,18 +1,11 @@
 ---
 title: "Creating New Geom_*() Objects for {ggplot2}"
-author: "Ben Stano"
+author: "Ben Stano, Kathryn Cronquist, and Thea De Jong"
 date: "3/27/2022"
 output: html_document
 ---
 
 # Extending `{ggplot2}`
-
-# Imports (move?)
-
-```{r}
-library(ggplot2)
-library(grid)
-```
 
 # Background
 
@@ -20,21 +13,27 @@ The `{ggplot2}` package is the most common used and robust plotting package in R
 
 While the tools provided to users are straightforward once learned, extending the functionality of `{ggplot2}` is a different beast entirely. `{ggplot2}` is built on the `ggproto` system of object oriented programming, a system used only in `{ggplot2}`. This OOP system is combined with the `grob` object-type from the `{grid}` package to create the stylish graphs most R users are familiar with.
 
-This vignette will focus on given readers enough information of the `ggproto` OOP system and `grob` objects to extend `{ggplot2}` functionality, creating graphics customized to the user's needs. For a deeper dive into `ggproto`, `grob` objects, and other `{ggplot2}` topics, use this attached references:
- - `ggproto` reference
- - `{grid}`/`grob` reference
- - `{ggplot2}` reference
- - other references?
+This vignette will focus on giving readers enough information of the `ggproto` OOP system and `grob` objects to extend `{ggplot2}` functionality, creating graphics customized to the user's needs. For a deeper dive into `ggproto`, `grob` objects, and other `{ggplot2}` topics, use these attached references:
 
-All geom and stat type objects in `{ggplot2}` are build on top of the `ggproto` object oriented system.
+  - [Extending ggplot2](https://ggplot2.tidyverse.org/articles/extending-ggplot2.html)
+  - [The grid Package](https://bookdown.org/rdpeng/RProgDA/the-grid-package.html)
+  - [grid Graphics](https://stat.ethz.ch/R-manual/R-devel/library/grid/doc/grid.pdf)
+  - [Modifying grid Grobs](http://web.mit.edu/r/current/lib/R/library/grid/doc/grobs.pdf)
 
-Stats are concerned with applying a particular type of transformation to a dataset, while Geoms are concerned with graphically displaying given data in a particular way. Though these may seem like very different goals, both are more similar than they appear.
+#### Necessary imports to get started:
 
-Both require a `ggproto` object declaration and a call to the `layer()` function.
+```{r}
+library(ggplot2)
+library(grid)
+```
 
-## Creating Stats and Geoms: the `ggproto()` Function
+This vignette will specifically focus on creating Stat and Geom type objects to extend `{ggplot2}`. A stat_*() function returns a layer that contains a Stat object, while a geom_*() function returns a layer that contains a Geom object. Stat objects are concerned with applying a particular type of transformation to a dataset, while Geom objects are concerned with graphically displaying given data in a particular way. Though these may seem like very different goals, both are more similar than they appear, as they both are responsible for rendering the data in a plot. These objects are all built on top of the `ggproto` object oriented system. 
 
-`ggproto` objects are initialized using the `ggproto` function. At the basic level, they require a name, a character object, and a type to inherit from, for our purposed either `Stat` or `Geom`.
+Both Stat and Geom objects require a `ggproto` object declaration and a call to the `layer()` function.
+
+## Creating Stat and Geom Objects: the `ggproto()` Function
+
+`ggproto` objects are initialized using the `ggproto` function. At the basic level, they require a name, a character object, and a type to inherit from, which, for our purposes, is either `Stat` or `Geom`.
 
 ```{r}
 G <- ggproto("G", # the name of the ggproto object
@@ -53,41 +52,41 @@ G$z
 
 ### The Stat `ggproto`
 
-Stats are `ggproto` objects which must be constructed with at least these two arguments:
+Stats are `ggproto` objects which must be constructed with at least two arguments:
 
  - `required_aes`: character vector that list the aesthetics users must provide
  - `compute_group`: a function which returns properly transformed data
  
-After these two arguments, a `layer()` function is used to specify defaults and specific parameters for the stat. First, one defines the defaults for the function and then the `layer()` function is called and sends arguments for the stat to the params argument. The same process is done for geoms. However, stats are more concerned with applying specific mathematically transformative logic to data. 
+After these two arguments, a `layer()` function is used to specify defaults and specific parameters for the stat. First, one defines the defaults for the function. Then the `layer()` function is called and sends arguments for the stat to the params argument. The same process is done for Geom objects. However, Stat objects are more concerned with applying specific mathematically transformative logic to data. 
 
 ### The Geom `ggproto`
 
-Creating Geoms is slightly more complicated than creating new Stats, as Geoms require an understanding of `{grid}` and `grob` objects from `{grid}`.
+Creating a Geom object is slightly more complicated than creating a new Stat object, as Geom objects require an understanding of `grid graphics` and `grob` objects from `{grid}`.
 
-Geoms are `ggproto` objects which must be constructed using at least these four arguments:
+Geom objects are `ggproto` objects which must be constructed using at least four arguments:
 
  - `required_aes`: character vector that lists the aesthetics users must provide
  - `default_aes` : list of aesthetics that have default values
  - `draw_key`: provides the function used to draw the key in the legend
- - `draw_panel()`: a function that requires three arguments a returns a grid glob type object. `draw_group()` may be used instead if one graphic element per row is required. Both require the same three arguments:
+ - `draw_panel()`: a function that requires three arguments a returns a grid grob type object. `draw_group()` may be used instead if one graphic element per row is required. Both require the same three arguments:
    - `data`: data.frame with one column for each aesthetic
    - `panel_params`: list of per-panel parameters generated by `coord()`
    - `coord`: an object describing a coordinate system
 
-Geoms are concerned with graphing data in a particular way.
+Geom objects are concerned with graphing data in a particular way.
 
 ### The `layer()` function
 
-The layer function, regardless of whether one is creating a stat or a geom, is where the defaults from the function are sent to when calling the function. They specify arguments for the geom/stat as well as any aesthetics. The params argument is perhaps one of the most important, as it can be used to inherit parameters from other functions. \n
+The layer function, regardless of whether one is creating a Stat object or a Geom object, is where the defaults from the function are sent to when calling the function. They specify arguments for the Stat or Geom object as well as any aesthetics. The params argument is perhaps one of the most important, as it can be used to inherit parameters from other functions.
 
-Essential Arguments (these are the arguments we used in the vignette):
+Essential Arguments Used in the Following Examples:
 
  - `geom`: geometric object used in displaying data
- - `stat`: statistical transoformation used on the data
+ - `stat`: statistical transformation used on the data
  - `data`: data taking the form of a data.frame, data inherited from plot data in the `ggplot()` call, or a function with the return value of a data.frame
  - `mapping`: mappings created by `aes()` to specify x and y values, for example
  - `position`: position adjustment
- - `show.legend`: whether this layer will be included in legends
+ - `show.legend`: determines whether this layer will be included in legends
  - `inherit.aes`: combines default aesthetics if TRUE, overrides them if FALSE
  - `params`: any additional parameters added to geom and stat, such as removing NA values
  
@@ -98,11 +97,13 @@ Other arguments include:
  - `key_glyph`
  - `layer_class`
 
-Note: While layer can also be called using `geom_*` or `stat_`, this may cause some confusion, as a layer necessitates both a geom and a state in its arguments
+Note: While layer can also be called using `geom_` or `stat_`, this may cause some confusion, as a layer necessitates both a Geom and a Stat in its arguments
 
-# Examples
+# Stat and Geom Object Examples
 
-## Stat Example
+## Example: The Stat `ggproto`
+
+In this Stat example, we first create the Stat object, `StatPercentile`, and then the layer function, `stat_percentile`. Finally, we test out the Stat on the `mpg` dataset to create a plot.   
 
 ```{r}
 StatPercentile <- ggproto("StatPercentile", Stat,
@@ -134,6 +135,8 @@ ggplot(mpg, aes(y = hwy)) +
 
 ## Allowing for Additional User Arguments
 
+Building off of the previous example, we can add additional user arguments to improve the plot. For example, below we add color and linetype to the previous stat percentile plot. 
+
 ```{r}
 StatPercentile <- ggproto("StatPercentile", Stat,
                           
@@ -159,10 +162,12 @@ stat_percentile <- function(mapping = NULL, data = NULL, geom = "line",
 }
 
 ggplot(mpg, aes(y = hwy)) +
-  stat_percentile(color = "red", linetype = "dashed", geom = "point")
+  stat_percentile(color = "red", linetype = "longdash")
 ```
 
-## Geom Example
+## Example: The Geom `ggproto`
+
+In this Geom example, we first create the Geom object, `GeomSimpleLine`, and then the layer function, `geom_simple_line`. Finally, we test out the Geom on the `mtcars` dataset to create a simple line plot.  
 
 ```{r}
 GeomSimpleLine <- ggproto("GeomSimpleLine", Geom,
@@ -189,17 +194,19 @@ geom_simple_line <- function(mapping = NULL, data = NULL, stat = "identity",
   layer(
     geom = GeomSimpleLine, mapping = mapping,  data = data, stat = stat, 
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm)
+    params = list(na.rm = na.rm, ...)
   )
 }
 
 ggplot(mtcars, aes(mpg, wt)) +
-  geom_simple_line()
+  geom_simple_line(color="blue")
 ```
 
 # Extending `{ggplot2}`: Difference Plot
 
-Text 
+The following examples walk through the creation of a custom Stat object, a custom Geom object, and how the two work together to extend `{ggplot2}` and create a custom difference plot. 
+
+A difference plot shows the average of two methods on the `x axis` and the difference between the two methods on the `y axis`.
 
 ## Custom Stat for Difference Plot
 
@@ -266,22 +273,7 @@ ggplot(data, aes(x, y)) +
 
 # Exercises
 
-```{r}
-new_data <- data.frame(y = mtcars$mpg)
-    model <- lm(mpg ~ wt, data = mtcars)
-    new_data$x <- predict(model, newdata = data.frame(wt = mtcars$wt))
-    new_data
-```
-```{r}
-rng <- range(c(1,2,100))
-
-?seq
-data.frame(x = seq(rng[1], rng[2]))
-```
-
 1. Create a Stat for a Regression Line (`geom_smooth()`)
-
-
 
 ```{r, echo = FALSE}
 StatLm <- ggproto("StatLm", Stat,
@@ -310,6 +302,9 @@ stat_lm <- function(mapping = NULL, data = NULL, geom = "line",
   )
 }
 ```
+
+ - Try it out on this code to achieve the plot below:
+
 ```{r}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
@@ -318,8 +313,6 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 
 2. Add arguments to the Regression Line Stat
-
-
 
 ```{r, echo = FALSE}
 StatLm <- ggproto("StatLm", Stat,
@@ -349,51 +342,13 @@ stat_lm <- function(mapping = NULL, data = NULL, geom = "line",
 }
 ```
 
-```{r}
+ - For example, see the plot below:
+
+```{r, echo = FALSE}
 ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
   stat_lm(formula = y ~ poly(x, 4), color = "blue", linetype = "dotted", size = 3)
 ```
-
-
-3. Create a Geom for <<Something>>
-
-```{r}
-GeomSimpleHist <- ggproto("GeomSimpleHist", Geom,
-  required_aes = c("x"),
-  default_aes = aes(shape = 19, colour = "black"),
-  draw_key = draw_key_path,
-
-  draw_panel = function(data, panel_params, coord) {
-    
-    data <- dplyr::arrange(data, x)
-    
-    coords <- coord$transform(data, panel_params)
-    grid::segmentsGrob(
-      coords$x,
-      gp = grid::gpar(col = coords$colour)
-    )
-  }
-)
-
-?draw_key
-geom_simple_line <- function(mapping = NULL, data = NULL, stat = "identity",
-                              position = "identity", na.rm = FALSE, show.legend = NA, 
-                              inherit.aes = TRUE, ...) {
-  layer(
-    geom = GeomSimpleLine, mapping = mapping,  data = data, stat = stat, 
-    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm)
-  )
-}
-
-ggplot(mtcars, aes(mpg, wt)) +
-  geom_simple_line()
-```
-
-
-
-
 
 
 
