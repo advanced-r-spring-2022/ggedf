@@ -101,20 +101,54 @@ Note: While layer can also be called using `geom_` or `stat_`, this may cause so
 
 ## The `{grid}` package
 
-`{grid}` is a base package handling graphics in `{ggplot2}`. While it is not responsible for base plot graphics, it does come pre-loaded with R.
+`{grid}` is a base R package the provides highly flexible and customizable graphical output. It is not responsible for displaying base graphical functions like `plot()`, but it does come pre-loaded with R.
 
+While `{grid}` does not provide high-level functions for outputting specific plots or graphics, it is the building blocks for many other high-level graphical output functions, such as those found in `{ggplot2}`. Knowledge of `{grid}` is required for creating complex custom `geom` objects.
+
+Working by itself, `{grid}` functions at a comparatively low-level. The basic way to display graphics of any kind in `{grid}` is:
+ - initialize and custom `grob` objects as desired
+ - call the custom objects with `grid.draw()`
+ 
 ### Exploring `grob` objects
 
-Basic types of `grob` objects:
- - `circleGrob`
- - `linesGrob`
- - `polygonGrob`
- - `rasterGrob`
- - `rectGrob`
- - `segmentsGrob`
- - `legendGrob`
- - `xaxisGrob`
- - `yaxisGrob`
+`grob` objects are key to extending `{ggplot2}` and creating custom `geom` objects.
+
+`grob` objects are the items that actually get displayed using `{grid}` graphics. A `{grid}` display without a `grob` would result in a blank plot. `{grid}` uses the `*Grob()` family of functions to create of edit `grob` objects. `{grid}` also contains the `grid.*()` family of functions to create their associate `grob` objects, but the `*Grob()` is more useful for our purposes.
+
+All `*Grob()` functions take arguments that change in relation to their graphical output type. However, all `*Grob()` functions take the `gp` argument, which allows for further customization. The `gp` argument takes a `gpar()` function as input.
+
+```{r}
+circle <- circleGrob(x = 0.5, y = 0.5, r = 0.25,
+                     gp = gpar(col = "red",   # line color
+                               fill = "blue", # fill color
+                               alpha = 0.75,  # transparency
+                               lty = 4,       # line type
+                               lwd = 5        # line width
+                               )
+                     )      
+
+grid.draw(circle)
+
+?pointsGrob
+```
+
+`gpar()` takes more arguments than shown, allowing for even more customization.
+
+Here are some of the basic `*Grob` family of functions:
+ - `circleGrob()`: as shown previously, this creates a circle
+ - `linesGrob()`: create a series of lines
+ - `rectGrob()`: create a rectangle
+ - `polygonGrob()`: create a polygon, remember the rules of polygons when using this
+ - `pointsGrob()`: create data symbols (these may be points, stars, shapes, etc.)
+ - `rasterGrob()`: create a bitmap image of a given size, shape, and location
+ - `segmentsGrob()`: create line segments
+ - `xaxisGrob()`: create an x-axis
+ - `yaxisGrob()`: create a y-axis
+ - `legendGrob()`: create a legend (this function is still in development and may change)
+
+You can look at the help sections of each `*Grob()` function to learn its required arguments and other information.
+
+The `{gridExtra}` package contains other types of `grob` objects and associated functions, like `tableGrob()`. This package and its associated functions work well with `{grid}` and `{ggplot2}`, so feel free to use this as liberally as you'd like!
 
 ### Viewports
 
