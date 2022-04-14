@@ -152,7 +152,19 @@ The `{gridExtra}` package contains other types of `grob` objects and associated 
 
 ### Viewports
 
-Viewports control how `{grid}` objects are displayed. They are necessary when display base `{grid}` graphics, but can sometimes be ignored when extending `{ggplot2}` graphics.
+Viewports control how `{grid}` objects are displayed. They are necessary when display base `{grid}` graphics, but can sometimes be ignored when extending `{ggplot2}` graphics. Viewports are smaller plotting windows, or graphics regions, used to customize plots one subspace at a time using grid graphics. They can be rotated and positioned anywhere, and one can use the viewports to zoom in and out while working on different parts of the plot. In order to create a viewport, one first needs to use the `viewport()` command.
+
+ - `viewport()`: creates the viewport and takes arguments for x and y coordinates (with the default unit being 1), the width and height of the viewport, and the justification for where the viewport is in relation to the location, returns a description of the graphics region
+ - `pushViewport()`: navigates into the specified location, adds a "leaf" to the tree with the previous viewport as parent
+ - `grid.draw()`: writes the grob
+ - `popViewport()`: navigates out of the viewport, or "prunes" the current viewport from the tree
+ 
+Note: viewports can be nested inside of each other, but you can only use one viewport at a time \
+
+Other functions include:
+
+ - `downViewport()`: navigates down the tree
+ - `upViewport()`: similar to `popViewport` without pruning the previous
 
 ### Coordinate Systems
 
