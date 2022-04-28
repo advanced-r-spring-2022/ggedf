@@ -1,9 +1,11 @@
 Package: ggedf
-Title: What the Package Does (One Line, Title Case)
+Title: Extending ggplot2: Empirical Distribution Function Plots
 Version: 0.0.0.9000
 Authors@R: 
-    person("Thea", "De Jong", "td0176a@american.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+    c(person("Thea", "De Jong", "td0176a@student.american.edu", role = c("aut"),
+      person("Kathryn", "Cronquist", "kc9345a@student.american.edu", role = c("aut"),
+      person("Ben", "Stano", email = "bs3654a@student.american.edu", role = c("aut"),
+           comment = c(ORCID = "YOUR-ORCID-ID")))
 Description: What the package does (one paragraph).
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
