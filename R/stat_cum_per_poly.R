@@ -25,9 +25,9 @@
 #' @author Thea
 #' 
 #' @examples
-#' ## Display CPP for the hwy variable in the mpg data set
+#' ## Display CPP for hwy of mpg, with a red dashed line
 #' ggplot(data = mpg, aes(x = hwy)) +
-#' stat_cum_per_poly()
+#' stat_cum_per_poly(color = "red", linetype = "dashed")
 #' 
 #' @export
 StatCPP <- ggproto("StatPercentile", Stat,
@@ -48,6 +48,6 @@ stat_cum_per_poly <- function(mapping = NULL, data = NULL, geom = "line",
   layer(
     stat = StatCPP, data = data, mapping = mapping, geom = geom, 
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm)
+    params = list(na.rm = na.rm, ...)
   )
 }

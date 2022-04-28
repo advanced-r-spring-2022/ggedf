@@ -36,9 +36,9 @@ containing at a particular value. Such graphics give insight into the
 distribution and shape of a data set.
 }
 \examples{
-## Display CPP for the hwy variable in the mpg data set
+## Display CPP for hwy of mpg, with a red dashed line
 ggplot(data = mpg, aes(x = hwy)) +
-stat_cum_per_poly()
+stat_cum_per_poly(color = "red", linetype = "dashed")
 
 }
 \author{
