@@ -20,8 +20,8 @@
 #' ggplot2 graphic object that can display a percentile summary graph.
 #' 
 #' @author Kathryn Cronquist
-#' @author Ben Stano
 #' @author Thea De Jong
+#' @author Ben Stano
 #' 
 #' @examples
 #' ## Display percentile summary graph of mpg, with blue scatterplot and dashed 

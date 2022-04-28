@@ -20,9 +20,9 @@
 #' @return This function in combination with a call to ggplot() returns a 
 #' ggplot2 graphic object that can display a cumulative percentage polygon.
 #' 
+#' @author Kathryn Cronquist
+#' @author Thea De Jong
 #' @author Ben Stano
-#' @author Kathryn
-#' @author Thea
 #' 
 #' @examples
 #' ## Display CPP for hwy of mpg, with a red dashed line
