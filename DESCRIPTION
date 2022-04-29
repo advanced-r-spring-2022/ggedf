@@ -7,12 +7,12 @@ Authors@R:
       person("Ben", "Stano", email = "bs3654a@student.american.edu", role = c("aut"),
            comment = c(ORCID = "YOUR-ORCID-ID")))
 Description: This package demonstrates an extension of ggplot2 that builds on the
-empirical distribution function to create alternative plots to the step-function
-plot. One of these allows the user to create percentile summary graphs. 
-These graphs show a scatterplot of points ({\frac{i}{n}},{X_i}) given a vector y, 
-as well as horizantel quantile lines. The package also allows the user to create 
-cumulative percentage polygon graphs, which connect points ({X_i}, {\frac{i}{n}}) 
-and show how each percentage is added as the graph progresses.
+    empirical distribution function to create alternative plots to the step-function
+    plot. One of these allows the user to create percentile summary graphs. 
+    These graphs show a scatterplot of points ({\frac{i}{n}},{X_i}) given a vector y, 
+    as well as horizantel quantile lines. The package also allows the user to create 
+    cumulative percentage polygon graphs, which connect points ({X_i}, {\frac{i}{n}}) 
+    and show how each percentage is added as the graph progresses.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
@@ -20,3 +20,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     ggplot2
+
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr

@@ -45,8 +45,8 @@ stat_quant(linetype = "dashed")
 \author{
 Kathryn Cronquist
 
-Ben Stano
-
 Thea De Jong
+
+Ben Stano
 }
 \keyword{datasets}

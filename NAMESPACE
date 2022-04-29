@@ -3,3 +3,5 @@
 export(StatCPP)
 export(StatPerSum)
 export(StatQuant)
+importFrom(ggplot2,)
+useDynLib(ldsep, .registration = TRUE)
