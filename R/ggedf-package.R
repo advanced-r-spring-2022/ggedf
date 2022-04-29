@@ -12,7 +12,7 @@
 #'   \item{\code{\link{stat_cum_per_poly}()}}{Plots a cumulative frequency
 #'   distribution by connecting points ({X_i}, {\frac{i}{n}})}
 #'   \item{\code{\link{stat_per_sum}()}}{Creates a scatterplot of points 
-#'   ({\frac{i}{n}},{X_i}) as well as horizantel quantil lines, similar to a 
+#'   ({\frac{i}{n}},{X_i}) as well as horizantel quantile lines, similar to a 
 #'   boxplot}
 #' }
 #'
