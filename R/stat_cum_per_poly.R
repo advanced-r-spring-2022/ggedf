@@ -5,7 +5,7 @@
 #' 
 #' @details This function creates a custom stat for {ggplot2} that can create 
 #' lines graphs showing the cumulative density polygon for a set of data. The 
-#' resulting graphic displays what percentage of the date is cumulatively 
+#' resulting graphic displays what percentage of the data is cumulatively 
 #' containing at a particular value. Such graphics give insight into the 
 #' distribution and shape of a data set.
 #' 
