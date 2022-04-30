@@ -19,3 +19,68 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(ggedf)
 ```
+
+# The Empirical Distribution Function
+
+This package uses an extension of the `ggplot2` package in order to create more
+geoms to visualize the empirical distribution function. This function takes a vector, 
+or distribution X and the function itself finds the proportions of each value of X that
+is less or equal to the current value. It is most often used when creating a
+step-function plot, which is shown below.
+
+## The Step-Function Plot
+
+```{r}
+x <- c(1, 5, 10, 15)
+edf_example <- ecdf(x)
+
+plot(edf_example)
+```
+
+# Cumulative Percentage Polygons
+
+Another way to visualize this function is via cumulative percentage polygons, 
+which connect each value of X to show the cumulative value at each "step". Using 
+the function `stat_cum_per_poly()`, one can create a plot that returns a ggplot2 
+object displaying a cumulative percentage polygon as a line graph. The only 
+argument required is the vector X, as well as any aesthetics normally used in
+`ggplot2` such as color and linetype. 
+
+```{r}
+#example here - should it be the same as in the help page? 
+```
+
+
+# Percentile Summary Graphs
+
+Percentile summary graphs are very similar to cumulative percentage polygons,
+but they plot ({\frac{i}{n}},{X_i}), instead of ({X_i}, {\frac{i}{n}}) in a 
+scatterplot. Additionally, a percentile summary graph also displays the quantiles
+of a distribution, similarly to a boxplot. \
+
+To create a percentile summary graph, two functions are necessary. The first, 
+`stat_per_sum()`, creates the scatterplot itsself. Then, `stat_quant()` draws
+the quantile lines. Both functions require only one argument, the vector X, as
+well as any aesthetics for the quantile lines or dot shape.
+
+## `stat_per_sum()`
+
+```{r}
+#example here
+```
+
+## `stat_quant()`
+
+```{r}
+#example here
+```
+
+
+# Confidence Intervals
+
+```{r}
+#example here - may shift this to under the EDF definition
+```
+
+
+

@@ -12,8 +12,9 @@
 #'   \item{\code{\link{stat_cum_per_poly}()}}{Plots a cumulative frequency
 #'   distribution by connecting points ({X_i}, {\frac{i}{n}})}
 #'   \item{\code{\link{stat_per_sum}()}}{Creates a scatterplot of points 
-#'   ({\frac{i}{n}},{X_i}) as well as horizantel quantile lines, similar to a 
-#'   boxplot}
+#'   ({\frac{i}{n}},{X_i})}
+#'    \item{\code{\link{stat_quant}()}}{Creates horizontal quantile lines, 
+#'    similar to a boxplot}
 #' }
 #'
 #'
