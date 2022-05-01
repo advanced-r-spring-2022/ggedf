@@ -12,8 +12,7 @@ Description: This package demonstrates an extension of ggplot2 that builds on th
     as well as horizantel quantile lines. The package also allows the user to create 
     cumulative percentage polygon graphs, which connect points ({X_i}, {\frac{i}{n}}) 
     and show how each percentage is added as the graph progresses.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
