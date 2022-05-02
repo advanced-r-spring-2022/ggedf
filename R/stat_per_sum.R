@@ -1,3 +1,15 @@
+StatPerSum <- ggplot2::ggproto("StatPerSum", ggplot2::Stat,
+                      
+                      compute_group = function(data, scales) {
+                        data <- data.frame(x = data$y)
+                        new_data <- data.frame(x = apply(data, 2, function(x) ecdf(x) (sort(x))))
+                        new_data$y <- sort(data$x)
+                        new_data
+                      },
+                      
+                      required_aes = c("y")
+                      
+)
 #' @title Create Percentile Summary Graphs
 #' 
 #' @description Create scatterplot of ({\frac{i}{n}},{X_i}) with horizontal 
@@ -25,37 +37,24 @@
 #' 
 #' @examples
 #' ## Display percentile summary graph of mpg, with blue scatterplot and dashed 
-#' quantile lines
-#' ggplot(mtcars, aes(y = mpg)) + 
+#' ## quantile lines
+#' 
+#' ggplot2::ggplot(mtcars, ggplot2::aes(y = mpg)) + 
 #' stat_per_sum(color = "blue") +
 #' stat_quant(linetype = "dashed")
 #' 
 #' @export
-StatPerSum <- ggproto("StatPerSum", Stat,
-                      
-                      compute_group = function(data, scales) {
-                        data <- data.frame(x = data$y)
-                        new_data <- data.frame(x = apply(data, 2, function(x) ecdf(x) (sort(x))))
-                        new_data$y <- sort(data$x)
-                        new_data
-                      },
-                      
-                      required_aes = c("y")
-                      
-)
-
 stat_per_sum <- function(mapping = NULL, data = NULL, geom = "point",
                          position = "identity", na.rm = FALSE, show.legend = NA, 
                          inherit.aes = TRUE, ...) {
-  layer(
+  ggplot2::layer(
     stat = StatPerSum, data = data, mapping = mapping, geom = geom, 
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
   )
 }
 
-#' @export
-StatQuant <- ggproto("StatQuant", Stat,
+StatQuant <- ggplot2::ggproto("StatQuant", ggplot2::Stat,
                      
                      compute_group = function(data, scales) {
                        ## Compute the line segment endpoints
@@ -71,10 +70,10 @@ StatQuant <- ggproto("StatQuant", Stat,
                      
                      required_aes = c("y")
 )
-
+#' @export
 stat_quant <- function(mapping = NULL, data = NULL, geom = "segment",
                        position = "identity", na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...) {
-  layer(
+  ggplot2::layer(
     stat = StatQuant, 
     data = data, 
     mapping = mapping, 

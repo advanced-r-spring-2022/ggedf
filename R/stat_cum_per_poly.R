@@ -1,3 +1,15 @@
+StatCPP <- ggplot2::ggproto("StatPercentile", ggplot2::Stat,
+                   
+                   compute_group = function(data, scales) {
+                     data <- data.frame(y = data$x)
+                     new_data <- data.frame(y = apply(data, 2, function(x) ecdf(x)(sort(x))))
+                     new_data$x <- sort(data$y)
+                     new_data
+                   },
+                   
+                   required_aes = c("x")
+                   
+)
 #' @title Create Cumulative Percentage Polygon Graphs
 #' 
 #' @description Create graphic where data is displayed as a line plot 
@@ -26,26 +38,14 @@
 #' 
 #' @examples
 #' ## Display CPP for hwy of mpg, with a red dashed line
-#' ggplot(data = mpg, aes(x = hwy)) +
+#' ggplot2::ggplot(data = ggplot2::mpg, ggplot2::aes(x = hwy)) +
 #' stat_cum_per_poly(color = "red", linetype = "dashed")
 #' 
 #' @export
-StatCPP <- ggproto("StatPercentile", Stat,
-                   
-                   compute_group = function(data, scales) {
-                     data <- data.frame(y = data$x)
-                     new_data <- data.frame(y = apply(data, 2, function(x) ecdf(x)(sort(x))))
-                     new_data$x <- sort(data$y)
-                     new_data
-                   },
-                   
-                   required_aes = c("x")
-                   
-)
 stat_cum_per_poly <- function(mapping = NULL, data = NULL, geom = "line",
                        position = "identity", na.rm = FALSE, show.legend = NA, 
                        inherit.aes = TRUE, ...) {
-  layer(
+  ggplot2::layer(
     stat = StatCPP, data = data, mapping = mapping, geom = geom, 
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
