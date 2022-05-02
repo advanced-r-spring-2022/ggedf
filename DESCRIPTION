@@ -5,7 +5,13 @@ Authors@R:
     c(person("Thea", "De Jong", , "td0176a@student.american.edu", role = c("aut", "cre")),
       person("Kathryn", "Cronquist", , "kc9345a@student.american.edu", role = c("aut")),
       person("Ben", "Stano", , "bs3654a@student.american.edu", role = c("aut")))
-Description: What the package does (one paragraph).
+Description: This package demonstrates an extension of ggplot2 that builds on the
+    empirical distribution function to create alternative plots to the step-function
+    plot. One of these allows the user to create percentile summary graphs. 
+    These graphs show a scatterplot of points ({\frac{i}{n}},{X_i}) given a vector y, 
+    as well as horizantel quantile lines. The package also allows the user to create 
+    cumulative percentage polygon graphs, which connect points ({X_i}, {\frac{i}{n}}) 
+    and show how each percentage is added as the graph progresses.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
