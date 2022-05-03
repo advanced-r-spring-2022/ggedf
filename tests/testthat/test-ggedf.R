@@ -19,3 +19,8 @@ test_that("stat_cum_per_poly has correct labels", {
   p <- ggplot2::ggplot(test_df, ggplot2::aes(foo)) + stat_cum_per_poly()
   expect_equal(p$labels$x, "foo")
 })
+
+test_that("stat_cum_per_poly has correct labels", {
+  p <- ggplot2::ggplot(test_df, ggplot2::aes(bar)) + stat_per_sum() + stat_quant()
+  expect_equal(p$labels$x, "bar")
+})
