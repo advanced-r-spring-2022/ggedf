@@ -32,7 +32,7 @@ StatCPP <- ggplot2::ggproto("StatPercentile", ggplot2::Stat,
 #' passed through the aes() function. This parameter may be passed directly to 
 #' stat_cum_per_poly or to a previous ggplot() call.
 #' @param ... stat_cum_per_poly supports the passing of additional parameters, 
-#' allowing for customization of graphics seens in other stats and geoms. For 
+#' allowing for customization of graphics seen in other stats and geoms. For 
 #' more information of what additional arguments can be passed, look at the 
 #' help files for ggplot() and any stats and geoms being used.
 #' 

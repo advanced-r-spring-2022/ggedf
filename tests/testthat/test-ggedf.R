@@ -20,16 +20,16 @@ test_that("stat_conf_int is ggproto", {
 })
 
 test_that("stat_cum_per_poly has correct labels", {
-  p <- ggplot2::ggplot(test_df, ggplot2::aes(foo)) + stat_cum_per_poly()
+  p <- ggplot2::ggplot(test_df) + stat_cum_per_poly(ggplot2::aes(x = foo))
   expect_equal(p$labels$x, "foo")
 })
 
 test_that("stat_quant has correct labels", {
-  p <- ggplot2::ggplot(test_df, ggplot2::aes(bar)) + stat_per_sum() + stat_quant()
-  expect_equal(p$labels$x, "bar")
+  p <- ggplot2::ggplot(test_df) + stat_per_sum(ggplot2::aes(y = bar)) + stat_quant()
+  expect_equal(p$labels$y, "bar")
 })
 
 test_that("stat_conf_int has correct labels", {
-  p <- ggplot2::ggplot(test_df, ggplot2::aes(bar)) + stat_per_sum() + stat_conf_int()
-  expect_equal(p$labels$x, "bar")
+  p <- ggplot2::ggplot(test_df) + stat_per_sum(ggplot2::aes(y = bar)) + stat_conf_int()
+  expect_equal(p$labels$y, "bar")
 })
