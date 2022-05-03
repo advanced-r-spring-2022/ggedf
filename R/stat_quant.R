@@ -2,10 +2,10 @@ StatQuant <- ggplot2::ggproto("StatQuant", ggplot2::Stat,
                               
                               compute_group = function(data, scales) {
                                 if (!is.numeric(data$y)) {
-                                  stop("x aesthetic must be a numeric vector")
+                                  stop("y aesthetic must be a numeric vector")
                                 }
                                 if (length(data$y) == 1) {
-                                  stop("x aesthetic must be a numeric vector")
+                                  stop("y aesthetic must be a numeric vector")
                                 }
                                 ## Compute the line segment endpoints
                                 x <- 0
