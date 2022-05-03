@@ -23,10 +23,11 @@ library(ggedf)
 # The Empirical Distribution Function
 
 This package uses an extension of the `ggplot2` package in order to create more
-geoms to visualize the empirical distribution function. This function takes a vector, 
-or distribution X and the function itself finds the proportions of each value of X that
-is less or equal to the current value. It is most often used when creating a
-step-function plot, which is shown below.
+geoms to visualize the empirical distribution function. This function takes an ordered
+vector, or distribution X and the function itself finds the proportions of each 
+value of X that is less or equal to the current value. It is most often used when 
+creating a step-function plot, which is shown below. Each "step" shows the fraction
+1/n at each data point of n observations.
 
 ## The Step-Function Plot
 
@@ -47,7 +48,8 @@ argument required is the vector X, as well as any aesthetics normally used in
 `ggplot2` such as color and linetype. 
 
 ```{r}
-#example here - should it be the same as in the help page? 
+ggplot2::ggplot(data = ggplot2::mpg, ggplot2::aes(x = wt)) +
+  stat_cum_per_poly(color = "red", linetype = "dashed")
 ```
 
 
@@ -66,20 +68,31 @@ well as any aesthetics for the quantile lines or dot shape.
 ## `stat_per_sum()`
 
 ```{r}
-#example here
+ggplot2::ggplot(mtcars, ggplot2::aes(y = hp)) + 
+  stat_per_sum(color = "red")
 ```
 
 ## `stat_quant()`
 
 ```{r}
-#example here
+ggplot2::ggplot(mtcars, ggplot2::aes(y = hp)) + 
+  stat_per_sum(color = "red") +
+  stat_quant(linetype = "dashed")
 ```
 
 
 # Confidence Intervals
 
+In addition to the above graphs, this package contains a function `stat_conf_int()`
+that returns a percentile summary graph with confidence intervals of the EDF 
+function. These are shown in the example below as dashed lines, compared to the 
+solid quantile lines.
+
 ```{r}
-#example here - may shift this to under the EDF definition
+ggplot2::ggplot(mtcars, ggplot2::aes(y = disp)) + 
+  stat_per_sum(color = "red") +
+  stat_quant() +
+  stat_conf_int(linetype = "dashed")
 ```
 
 
