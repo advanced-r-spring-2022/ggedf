@@ -39,8 +39,8 @@ The function conf_int creates a custom stat for
 }
 \examples{
 ## Display percentile summary graph of mpg, with blue scatterplot and solid 
-quantile lines, and dashed confidence intervals
-ggplot(mtcars, aes(y = mpg)) + 
+## quantile lines, and dashed confidence intervals
+ggplot2::ggplot(mtcars, ggplot2::aes(y = mpg)) + 
 stat_per_sum(color = "blue") +
 stat_quant() +
 stat_conf_int(linetype = "dashed")

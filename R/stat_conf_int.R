@@ -1,4 +1,4 @@
-StatConfInt <- ggproto("StatConfInt", Stat,
+StatConfInt <- ggplot2::ggproto("StatConfInt", ggplot2::Stat,
                        
                        compute_group = function(data, scales) {
                          data <- data.frame(x = data$y)
@@ -54,8 +54,8 @@ StatConfInt <- ggproto("StatConfInt", Stat,
 #' 
 #' @examples
 #' ## Display percentile summary graph of mpg, with blue scatterplot and solid 
-#' quantile lines, and dashed confidence intervals
-#' ggplot(mtcars, aes(y = mpg)) + 
+#' ## quantile lines, and dashed confidence intervals
+#' ggplot2::ggplot(mtcars, ggplot2::aes(y = mpg)) + 
 #' stat_per_sum(color = "blue") +
 #' stat_quant() +
 #' stat_conf_int(linetype = "dashed")
@@ -64,7 +64,7 @@ StatConfInt <- ggproto("StatConfInt", Stat,
 stat_conf_int <- function(mapping = NULL, data = NULL, geom = "segment",
                           position = "identity", na.rm = FALSE, 
                           show.legend = NA, inherit.aes = TRUE, ...) {
-  layer(
+  ggplot2::layer(
     stat = StatConfInt, 
     data = data, 
     mapping = mapping, 
