@@ -48,7 +48,7 @@ argument required is the vector X, as well as any aesthetics normally used in
 `ggplot2` such as color and linetype. 
 
 ```{r}
-ggplot2::ggplot(data = ggplot2::mpg, ggplot2::aes(x = wt)) +
+ggplot2::ggplot(data = mtcars, ggplot2::aes(x = wt)) +
   stat_cum_per_poly(color = "red", linetype = "dashed")
 ```
 
