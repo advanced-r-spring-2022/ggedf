@@ -8,7 +8,7 @@ StatCPP <- ggplot2::ggproto("StatPercentile", ggplot2::Stat,
                        stop("x aesthetic must be a numeric vector")
                      }
                      
-                     data <- data.frame(y = na.rm(data$x))
+                     data <- data.frame(y = data$x)
                      new_data <- data.frame(y = apply(data, 2, function(x) ecdf(x)(sort(x))))
                      new_data$x <- sort(data$y)
                      new_data
