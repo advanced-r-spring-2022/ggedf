@@ -1,6 +1,12 @@
 StatCPP <- ggplot2::ggproto("StatPercentile", ggplot2::Stat,
                    
                    compute_group = function(data, scales) {
+                     if (!is.numeric(data$x)) {
+                       stop("x aesthetic must be a numeric vector")
+                     }
+                     if (length(data$x) == 1) {
+                       stop("x aesthetic must be a numeric vector")
+                     }
                      data <- data.frame(y = data$x)
                      new_data <- data.frame(y = apply(data, 2, function(x) ecdf(x)(sort(x))))
                      new_data$x <- sort(data$y)
