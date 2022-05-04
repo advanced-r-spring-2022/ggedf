@@ -34,16 +34,16 @@ separations.
 }
 \details{
 The functions stat_per_sum and stat_quant create a custom stat for
-{ggplot2} to create a scatterplot of ({\frac{i}{n}},{X_i}) and an
+{ggplot2} to create a scatterplot of \eqn{(i/n,X_i)} and an
 accompanying stat for {ggplot2} that indicates the quantiles. Combined, these
 graphics create a percentile summary graph to show the distribution of a
 variable in a data set.
 }
 \examples{
-## Display percentile summary graph of mpg, with blue scatterplot and dashed 
+## Display percentile summary graph of mpg, with blue scatterplot and dashed
 ## quantile lines
 
-ggplot2::ggplot(mtcars, ggplot2::aes(y = mpg)) + 
+ggplot2::ggplot(mtcars, ggplot2::aes(y = mpg)) +
 stat_per_sum(color = "blue") +
 stat_quant(linetype = "dashed")
 
